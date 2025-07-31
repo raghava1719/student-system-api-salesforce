@@ -44,11 +44,11 @@ output application/json
 output application/json
 ---
 {
+	statusCode:409,
 	message:payload.items[0].payload.errors.message[0] contains "Email__c" then "Student with this Email already exist."
 }]]></ee:set-payload>
 					</ee:message>
 					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</when>
@@ -68,7 +68,7 @@ payload]]></ee:set-payload>
 				<ee:transform doc:name="Transform Message" doc:id="c5e80e84-f72f-46c9-a063-6b164fe3d7ab" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 	statusCode : 500,
@@ -96,7 +96,7 @@ output application/json
 				<ee:transform doc:name="Transform Message" doc:id="c5beee4b-3c7b-4234-be25-d476f731d767" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
 	statusCode : 403,
