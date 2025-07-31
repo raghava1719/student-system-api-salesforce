@@ -61,12 +61,7 @@
 							</services>
 						</integrations>
 					</cloudhub2Deployment>
-					<sharedLibraries>
-						<sharedLibrary>
-							<groupId>mysql</groupId>
-							<artifactId>mysql-connector-java</artifactId>
-						</sharedLibrary>
-					</sharedLibraries>
+					
 				</configuration>
 			</plugin>
 		</plugins>
