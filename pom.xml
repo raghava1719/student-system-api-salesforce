@@ -36,31 +36,32 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<cloudhub2Deployment>
-						<uri>https://anypoint.mulesoft.com</uri>
-						<provider>MC</provider>
-						<environment>Sandbox</environment>
-						<target>Cloudhub-US-East-2</target>
-						<muleVersion>4.9.6</muleVersion>
-						<javaVersion>17</javaVersion>
-						<releaseChannel>EDGE</releaseChannel>
-						<server>ca.anypoint.credentials</server>
-						<properties>
-							<anypoint.platform.client_id>${ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>
-							<anypoint.platform.client_secret>${ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
-						</properties>
-						<applicationName>student-management-api-salesforce</applicationName>
-						<replicas>1</replicas>
-						<vCores>0.1</vCores>
-						<skipDeploymentVerification>${skipDeploymentVerification}</skipDeploymentVerification>
-						<integrations>
-							<services>
-								<objectStoreV2>
-									<enabled>true</enabled>
-								</objectStoreV2>
-							</services>
-						</integrations>
-					</cloudhub2Deployment>
+					
+<cloudhub2Deployment>
+      <provider>MC</provider> <!-- MC = Mule Cloud -->
+      <environment>Sandbox</environment> <!-- Replace with your target environment -->
+      <target>Cloudhub-US-East-2</target> <!-- Replace with your actual target region -->
+      <muleVersion>4.9.6</muleVersion> <!-- Match your runtime version -->
+      <javaVersion>17</javaVersion> <!-- Match your app's Java version -->
+      <releaseChannel>EDGE</releaseChannel> <!-- EDGE or STABLE -->
+      <applicationName>student-management-api-salesforce</applicationName>
+      <replicas>1</replicas>
+      <vCores>0.1</vCores>
+      <server>ca.anypoint.credentials</server> <!-- Must match your settings.xml server ID -->
+      <skipDeploymentVerification>false</skipDeploymentVerification>
+      <properties>
+        <anypoint.platform.client_id>${ANYPOINT_CLIENT_ID}</anypoint.platform.client_id>
+        <anypoint.platform.client_secret>${ANYPOINT_CLIENT_SECRET}</anypoint.platform.client_secret>
+      </properties>
+      <integrations>
+        <services>
+          <objectStoreV2>
+            <enabled>true</enabled>
+          </objectStoreV2>
+        </services>
+      </integrations>
+    </cloudhub2Deployment>
+
 					<sharedLibraries>
 						<sharedLibrary>
 							<groupId>mysql</groupId>
