@@ -45,7 +45,7 @@
   <javaVersion>17</javaVersion>
   <releaseChannel>EDGE</releaseChannel>
   <server>ca.anypoint.credentials</server>
-  <applicationName>student-management-api-salesforce</applicationName>
+  <applicationName>student-management-api-salesforce-runtime</applicationName>
   <replicas>1</replicas>
   <vCores>0.1</vCores>
   <skipDeploymentVerification>false</skipDeploymentVerification>
