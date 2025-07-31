@@ -109,7 +109,14 @@ output application/json
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="01c16354-a308-447d-b9d9-66eff5d609b0" type="ANY">
 				<ee:transform doc:name="Transform Message" doc:id="8a71794b-c08f-4b0d-b94e-9ae5a4259cda" >
 					<ee:message >
-						<ee:set-payload resource="salesforce-connectivity-error.dwl" />
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	statusCode : 403,
+	errorStatus : error.errorType.identifier,
+	errroMessage: error.detailedDescription
+}]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</on-error-continue>
