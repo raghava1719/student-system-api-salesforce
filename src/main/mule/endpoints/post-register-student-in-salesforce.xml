@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<flow name="post:\student\register:application\json:api-config" doc:id="6bc710d5-f292-4b04-9474-9f5e2c09ba2a" >
+		<ee:transform doc:name="map-to-saleforce-names" doc:id="db2e3c7d-88f7-4570-a4a6-8a9df60c9bde">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Name:payload.name,
+	Admission_Percentage__c:payload.admissionPercentage,
+	Email__c:payload.email,
+	Address__c:payload.address default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create type="Student__c" doc:id="14b90467-90ea-4c4f-862b-90ba0c26730b" config-ref="Salesforce_Config" doc:name="Create">
+			<salesforce:records><![CDATA[#[[payload]]]]></salesforce:records>
+		</salesforce:create>
+		<logger level="INFO" doc:name="Logger" doc:id="5a734707-c805-4e05-85e5-625722bb923c" message="#[payload]" />
+		<choice doc:name="Choice" doc:id="802d7fcd-e6c0-498b-b10f-a2f9889526e8">
+			<when expression="#[payload.items[0].successful]">
+				<ee:transform doc:name="Transform Message" doc:id="9ccbb0af-f9cb-4bee-b3d8-aa137dab24bd">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  studentId: payload.items[0].id,
+  message: "Student registered successfully"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[payload.items[0].statusCode=="DUPLICATE_VALUE"]'>
+				<ee:transform doc:name="Transform Message" doc:id="41d3da22-b47e-4a16-8993-9314304a739a">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message:payload.items[0].payload.errors.message[0] contains "Email__c" then "Student with this Email already exist."
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Transform Message" doc:id="250a19ee-4ddc-44e6-adfe-84334fb9f203">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="83102a7d-6e88-43bb-9dcb-eba6188d3dc3" type="SALESFORCE:CONNECTIVITY">
+				<ee:transform doc:name="Transform Message" doc:id="c5e80e84-f72f-46c9-a063-6b164fe3d7ab" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	statusCode : 500,
+	errorStatus : error.errorType.identifier,
+	errroMessage: error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f2a8e56e-7a4d-44ef-93d6-d9082913e18f" type="SALESFORCE:TIMEOUT">
+				<ee:transform doc:name="Transform Message" doc:id="60bb4104-4e7a-4ab4-8031-cd8178398dc3">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	statusCode : 504,
+	errorStatus : error.errorType.identifier,
+	errroMessage: error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7930f7c1-4ebe-4622-a585-9c596d06e663" type="SALESFORCE:INSUFFICIENT_PERMISSIONS">
+				<ee:transform doc:name="Transform Message" doc:id="c5beee4b-3c7b-4234-be25-d476f731d767" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	statusCode : 403,
+	errorStatus : error.errorType.identifier,
+	errroMessage: error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="01c16354-a308-447d-b9d9-66eff5d609b0" type="ANY">
+				<ee:transform doc:name="Transform Message" doc:id="8a71794b-c08f-4b0d-b94e-9ae5a4259cda" >
+					<ee:message >
+						<ee:set-payload resource="salesforce-connectivity-error.dwl" />
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
