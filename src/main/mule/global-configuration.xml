@@ -17,7 +17,6 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="f71b4fe8-f0e4-465c-8042-37650a76664f" file="config-properties.yaml" key="thisismysecurekey" >
 		<secure-properties:encrypt algorithm="Blowfish" />
 	</secure-properties:config>
-	<api-gateway:autodiscovery apiId="${api-instance-id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="df9e1080-ca26-4f0c-8284-df4c5b801284" flowRef="api-main" />
 	<http:listener-config name="api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
