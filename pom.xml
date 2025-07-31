@@ -82,13 +82,13 @@
 			<version>1.2.5</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>04e109aa-e220-4864-8b52-bc85a75055d6</groupId>
 			<artifactId>student-management-api-salesforce</artifactId>
 			<version>1.0.0</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
