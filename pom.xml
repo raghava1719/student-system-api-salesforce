@@ -45,7 +45,6 @@
   <javaVersion>17</javaVersion>
   <releaseChannel>EDGE</releaseChannel>
   <server>ca.anypoint.credentials</server>
-  <deploymentType>localDeploy</deploymentType> 
   <applicationName>student-management-api-salesforce</applicationName>
   <replicas>1</replicas>
   <vCores>0.1</vCores>
@@ -62,6 +61,7 @@
     </services>
   </integrations>
 </cloudhub2Deployment>
+
 
 					
 				</configuration>
